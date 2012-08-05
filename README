@@ -1,0 +1,30 @@
+Lets you switch the USB mode of your N900 between ethernet and storage mode.
+You can choose between different image files or cd iso images i. e. to be able
+to install different operating systems without the need to carrying a bunch of
+USB sticks with you.
+
+
+Usage:
+- Create a folder /home/user/MyDocs/usbvieh and put your image files / iso images
+  or symlinks to them into it.
+- start the usbvieh
+- choose some files and add them with +
+- choose:
+  - click "file" to make them accessible via usb
+  - click "ether" to have usb networking
+
+
+Installation:
+touch /etc/modprobe.d/g_file_storage
+chown user /etc/modprobe.d/g_file_storage
+
+ensure that user is allowed to sudo modprobe g_file_storage file=... and sudo modprobe g_ether (should be enabled by default)
+
+get rid of:  892 haldaemo  3084 S    {hald-addon-usb-} hald-addon-usb-cable: listening on /sys/devices/platform/musb_hdrc/usb1/../mode
+# chmod -x /usr/lib/hal/hald-addon-usb-cable
+add to /etc/event.d/rcS-late at the right place:
+    mount /home/user/MyDocs/
+
+prevent automatic loading of g_nokia:
+comment out g_file_storage and g_nokia in these files: grep -r "g_file_storage\|g_nokia" /etc/ to prevent automatic loading of them, as I had trouble removing g_nokia
+
